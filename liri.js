@@ -12,6 +12,8 @@ let spotify = new Spotify(keys.spotify);
 let client = new Twitter(keys.twitter);
 
 
+
+
 var input = process.argv;
 var command = input[2];
 var query = input.splice(3).join(" ");
@@ -32,15 +34,15 @@ function searchSong(query){
         }
         else {
             
+            let dataSearch = data.tracks.items[0];
+            
+            console.log('+=+=+=+=+=+=+=+=+Movie Info+=+=+=+=+=+=+=+=+');
+            console.log('Artist: ' + dataSearch.artists[0].name);
+            console.log('Song title: ' + dataSearch.name);
+            console.log('Preview Url: ' + dataSearch.preview_url);
+            console.log('Album: ' + dataSearch.album.name); 
+            console.log('+=+=+=+=+=+=+=+=+Movie Info+=+=+=+=+=+=+=+=+');
         }
-        
-        // let dataSearch = data.tracks.items[0];
-        // console.log('+=+=+=+=+=+=+=+=+Movie Info+=+=+=+=+=+=+=+=+');
-        // console.log('Artist: ' + dataSearch.artists[0].name);
-        // console.log('Song title: ' + dataSearch.name);
-        // console.log('Preview Url: ' + dataSearch.preview_url);
-        // console.log('Album: ' + dataSearch.album.name); 
-        // console.log('+=+=+=+=+=+=+=+=+Movie Info+=+=+=+=+=+=+=+=+');
     })
 }
     // search spotify for song
@@ -74,11 +76,36 @@ function searchTweet(query){
         }
     })
 }
-    // get tweets from twitter
-    // display tweets
 // OMDB funcion
 function searchMovie(query){
     console.log("OMDB");
+    let movieKey = "trilogy";
+    let movieURL = "http://www.omdbapi.com/?t=" + query + "&apikey=" + movieKey + "";
+
+    request(movieURL, function(err, response, body) {
+       
+
+        if (err && response.statusCode === 200) {
+            
+            console.log('Something went wrong' + err)
+        }
+        else {
+            
+            var searchBody = JSON.parse(body);
+            
+
+            console.log("=====================Movie Info==================")
+            console.log(searchBody.Title);
+            console.log(searchBody.Year);
+            console.log("OMDB Rating: " + searchBody.imdbRating)
+            console.log("Rotten Tomatoes Rating: " + searchBody.Ratings[1].Value);
+            console.log("Country: " + searchBody.Country);
+		    console.log("Language: " + searchBody.Language);
+		    console.log("Plot: " + searchBody.Plot);
+		    console.log("Actors: " + searchBody.Actors);
+
+        }
+    })
 }
     // fetch movie data from OMDB
     // display reseults
@@ -102,13 +129,12 @@ function determineCommand(command, query){
         break;
     case "my-tweets":
         searchTweet(query);
-        console.log(searchTweet);
         break;
     case "do-what-it-says":
         searchText();
         break;
     default: 
-        console.log("That is not a valid command");
+        console.log("That is not a valid command!!");
     }
     
 }
