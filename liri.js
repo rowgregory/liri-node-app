@@ -36,12 +36,12 @@ function searchSong(query){
             
             let dataSearch = data.tracks.items[0];
             
-            console.log('+=+=+=+=+=+=+=+=+Movie Info+=+=+=+=+=+=+=+=+');
+            console.log('+=+=+=+=+=+=+=+=+Song Info+=+=+=+=+=+=+=+=+');
             console.log('Artist: ' + dataSearch.artists[0].name);
             console.log('Song title: ' + dataSearch.name);
             console.log('Preview Url: ' + dataSearch.preview_url);
             console.log('Album: ' + dataSearch.album.name); 
-            console.log('+=+=+=+=+=+=+=+=+Movie Info+=+=+=+=+=+=+=+=+');
+            console.log('+=+=+=+=+=+=+=+=+Song Info+=+=+=+=+=+=+=+=+');
         }
     })
 }
@@ -110,9 +110,34 @@ function searchMovie(query){
     // fetch movie data from OMDB
     // display reseults
 // do what it says function
-function searchText(query){
-    console.log("text file");
-}
+function searchText(){
+    // console.log("text file");
+    fs.readFile('./random.txt', "utf8", function(err, data){
+        
+        if (err) {
+            return console.log(err);
+  		}
+        var dataArr = data.split(",");
+        var query = dataArr[1].slice(1, -1);
+        
+        switch (dataArr[0]){
+            case "spotify-this-song":
+                searchSong(query);
+                break;
+            case "movie-this":
+                searchMovie(query);
+                break;
+            case "my-tweets":
+                searchTweet(query);
+                break;
+            case "do-what-it-says":
+                searchText();
+                break;
+            default: 
+                console.log("That is not a valid command!!");
+        }  
+    });
+};
     // read file
     // determine what function to run and run it
 
