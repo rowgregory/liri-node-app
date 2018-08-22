@@ -24,7 +24,7 @@ console.log(command, query);
 // spotify function
 function searchSong(query){
     
-    if(query === undefined) {
+    if(!query) {
         query = "the sign";
     }
 
@@ -36,12 +36,12 @@ function searchSong(query){
             
             let dataSearch = data.tracks.items[0];
             
-            console.log('+=+=+=+=+=+=+=+=+Movie Info+=+=+=+=+=+=+=+=+');
+            console.log('+=+=+=+=+=+=+=+=+Song Info+=+=+=+=+=+=+=+=+');
             console.log('Artist: ' + dataSearch.artists[0].name);
             console.log('Song title: ' + dataSearch.name);
             console.log('Preview Url: ' + dataSearch.preview_url);
             console.log('Album: ' + dataSearch.album.name); 
-            console.log('+=+=+=+=+=+=+=+=+Movie Info+=+=+=+=+=+=+=+=+');
+            console.log('+=+=+=+=+=+=+=+=+Song Info+=+=+=+=+=+=+=+=+');
         }
     })
 }
@@ -78,11 +78,17 @@ function searchTweet(query){
 }
 // OMDB funcion
 function searchMovie(query){
+
+    if(!query) {
+        query = "Mr. Nobody";
+    }
     console.log("OMDB");
     let movieKey = "trilogy";
     let movieURL = "http://www.omdbapi.com/?t=" + query + "&apikey=" + movieKey + "";
 
     request(movieURL, function(err, response, body) {
+
+        
        
 
         if (err && response.statusCode === 200) {
@@ -110,9 +116,19 @@ function searchMovie(query){
     // fetch movie data from OMDB
     // display reseults
 // do what it says function
-function searchText(query){
-    console.log("text file");
-}
+function searchText(){
+    // console.log("text file");
+    fs.readFile('./random.txt', "utf8", function(err, data){
+        
+        if (err) {
+            return console.log(err);
+  		}
+        var dataArr = data.split(",");
+        var query = dataArr[1].slice(1, -1);
+        
+        determineCommand(dataArr[0], query) 
+    });
+};
     // read file
     // determine what function to run and run it
 
@@ -136,6 +152,12 @@ function determineCommand(command, query){
     default: 
         console.log("That is not a valid command!!");
     }
+    var log = command +"," + query;
+    fs.appendFile("log.txt", log + ";",  function(err) {
+        if (err) {
+            return console.log(err);
+        }
+    })
     
 }
 
