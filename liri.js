@@ -24,7 +24,7 @@ console.log(command, query);
 // spotify function
 function searchSong(query){
     
-    if(query === undefined) {
+    if(!query) {
         query = "the sign";
     }
 
@@ -78,11 +78,17 @@ function searchTweet(query){
 }
 // OMDB funcion
 function searchMovie(query){
+
+    if(!query) {
+        query = "Mr. Nobody";
+    }
     console.log("OMDB");
     let movieKey = "trilogy";
     let movieURL = "http://www.omdbapi.com/?t=" + query + "&apikey=" + movieKey + "";
 
     request(movieURL, function(err, response, body) {
+
+        
        
 
         if (err && response.statusCode === 200) {
@@ -120,22 +126,7 @@ function searchText(){
         var dataArr = data.split(",");
         var query = dataArr[1].slice(1, -1);
         
-        switch (dataArr[0]){
-            case "spotify-this-song":
-                searchSong(query);
-                break;
-            case "movie-this":
-                searchMovie(query);
-                break;
-            case "my-tweets":
-                searchTweet(query);
-                break;
-            case "do-what-it-says":
-                searchText();
-                break;
-            default: 
-                console.log("That is not a valid command!!");
-        }  
+        determineCommand(dataArr[0], query) 
     });
 };
     // read file
@@ -161,6 +152,12 @@ function determineCommand(command, query){
     default: 
         console.log("That is not a valid command!!");
     }
+    var log = command +"," + query;
+    fs.appendFile("log.txt", log + ";",  function(err) {
+        if (err) {
+            return console.log(err);
+        }
+    })
     
 }
 
